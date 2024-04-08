@@ -12,5 +12,15 @@
     "48": "icon.png",
     "128": "icon.png"
   },
-  "options_page": "options.html"
+
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScripts.js"]
+    }
+  ]
 }

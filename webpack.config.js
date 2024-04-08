@@ -7,6 +7,8 @@ module.exports = {
   entry: {
     popup: path.resolve("src/popup/popup.tsx"),
     options: path.resolve("src/options/options.tsx"),
+    background: path.resolve("src/background/background.ts"),
+    contentScripts: path.resolve("src/contentScripts/contentScripts.ts"),
   },
   module: {
     rules: [
@@ -16,13 +18,13 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        use:['style-loader','css-loader'],
-        test:/\.css$/i
+        use: ["style-loader", "css-loader"],
+        test: /\.css$/i,
       },
       {
-        type:'asset/resource',
-        test:/\.(jpg|jpeg|png|woff|woff2|eot|ttf|svg)$/
-      }
+        type: "asset/resource",
+        test: /\.(jpg|jpeg|png|woff|woff2|eot|ttf|svg)$/,
+      },
     ],
   },
   plugins: [
