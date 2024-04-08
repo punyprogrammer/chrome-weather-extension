@@ -6,7 +6,7 @@ module.exports = {
   devtool: "cheap-module-source-map",
   entry: {
     popup: path.resolve("src/popup/popup.tsx"),
-    options:path.resolve("src/options/options.tsx")
+    options: path.resolve("src/options/options.tsx"),
   },
   module: {
     rules: [
@@ -26,8 +26,13 @@ module.exports = {
         },
       ],
     }),
-    ...getHTMLPlugins(['popup','options'])
+    ...getHTMLPlugins(["popup", "options"]),
   ],
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
+  },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
@@ -37,10 +42,13 @@ module.exports = {
   },
 };
 
-function getHTMLPlugins(chunks){
-    return chunks.map((chunk)=> new HtmlPlugin({
-        title:"React Extension",
-        filename:`${chunk}.html`,
-        chunks:[chunk]
-    }))
+function getHTMLPlugins(chunks) {
+  return chunks.map(
+    (chunk) =>
+      new HtmlPlugin({
+        title: "React Extension",
+        filename: `${chunk}.html`,
+        chunks: [chunk],
+      })
+  );
 }
