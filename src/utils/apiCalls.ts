@@ -22,11 +22,11 @@ export interface OpenWeatherData {
 }
 
 export async function getWeatherDataForQuery(
-  query: string
+  city: string
 ): Promise<OpenWeatherData> {
   try {
     const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${OPEN_WEATHER_API_KEY}&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPEN_WEATHER_API_KEY}&units=metric`
     );
     if (!res.ok) {
       throw new Error("No City found");
