@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { OpenWeatherData, getWeatherDataForQuery } from "../../utils/apiCalls";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from "@mui/material";
 
 const WeatherCardContainer: React.FC<{ children }> = ({ children }) => {
   return (
@@ -14,8 +21,10 @@ const WeatherCardContainer: React.FC<{ children }> = ({ children }) => {
 type WeatherCardState = "loading" | "error" | "ready";
 const WeatherCard: React.FC<{
   city: string;
-  index:number;
-}> = ({ city }) => {
+  key: string;
+  index: number;
+  onDelete?: (index: number) => void;
+}> = ({ city, index, onDelete }) => {
   const [weatherData, setWeatherData] = useState<OpenWeatherData | null>(null);
   const [weatherCardState, setWeatherCardState] =
     useState<WeatherCardState>("loading");
@@ -53,6 +62,15 @@ const WeatherCard: React.FC<{
       <Typography variant="body1">
         Feels Like:{Math.round(weatherData?.main?.feels_like)}
       </Typography>
+      <CardActions sx={{ paddingInline: "0px" }}>
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => onDelete(index)}
+        >
+          Delete
+        </Button>
+      </CardActions>
     </WeatherCardContainer>
   );
 };
