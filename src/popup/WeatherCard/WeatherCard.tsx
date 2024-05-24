@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { OpenWeatherData, getWeatherDataForQuery } from "../../utils/apiCalls";
+import {
+  OpenWeatherData,
+  OpenWeatherScale,
+  getWeatherDataForQuery,
+} from "../../utils/apiCalls";
 import {
   Box,
   Button,
@@ -8,6 +12,7 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import { getSymbolForScale } from "../../utils/utilFunctions";
 
 const WeatherCardContainer: React.FC<{ children }> = ({ children }) => {
   return (
@@ -24,12 +29,14 @@ const WeatherCard: React.FC<{
   key: string;
   index: number;
   onDelete?: (index: number) => void;
-}> = ({ city, index, onDelete }) => {
+  tempScale: OpenWeatherScale;
+}> = ({ city, index, onDelete, tempScale }) => {
   const [weatherData, setWeatherData] = useState<OpenWeatherData | null>(null);
   const [weatherCardState, setWeatherCardState] =
     useState<WeatherCardState>("loading");
+  const scaleSymbol: string = getSymbolForScale(tempScale);
   useEffect(() => {
-    getWeatherDataForQuery(city)
+    getWeatherDataForQuery(city, tempScale)
       .then((res) => {
         setWeatherData(res);
         setWeatherCardState("ready");
@@ -41,7 +48,7 @@ const WeatherCard: React.FC<{
       .catch((err) => {
         setWeatherCardState("error");
       });
-  }, []);
+  }, [tempScale]);
   if (weatherCardState === "loading" || weatherCardState === "error") {
     return (
       <WeatherCardContainer>
@@ -58,9 +65,11 @@ const WeatherCard: React.FC<{
       <Typography variant="h5">{weatherData?.name}</Typography>
       <Typography variant="body1">
         Temp:{Math.round(weatherData?.main?.temp)}
+        {scaleSymbol}
       </Typography>
       <Typography variant="body1">
         Feels Like:{Math.round(weatherData?.main?.feels_like)}
+        {scaleSymbol}
       </Typography>
       <CardActions sx={{ paddingInline: "0px" }}>
         <Button

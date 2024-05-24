@@ -20,12 +20,13 @@ export interface OpenWeatherData {
     deg: number;
   };
 }
-
+export type OpenWeatherScale = "metric" | "imperial" | "standard";
 export async function getWeatherDataForQuery(
-  city: string
+  city: string,
+  scale: OpenWeatherScale
 ): Promise<OpenWeatherData> {
   const res = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPEN_WEATHER_API_KEY}&units=metric`
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPEN_WEATHER_API_KEY}&units=${scale}`
   );
   if (!res.ok) {
     throw new Error("No City found");
