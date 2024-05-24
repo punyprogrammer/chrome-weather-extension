@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import { IconButton, InputBase, Paper } from "@mui/material";
+import { OpenWeatherScale } from "../utils/apiCalls";
 
 export const CityInput: React.FC<{
   cityQuery: string;
@@ -35,6 +36,21 @@ export const CityInput: React.FC<{
           onClick={() => onAdd(cityQuery)}
         >
           <AddIcon />
+        </IconButton>
+      </Paper>
+    </Box>
+  );
+};
+
+export const TempScale: React.FC<{
+  tempScale: OpenWeatherScale;
+  onMetricChange: () => void;
+}> = ({ tempScale, onMetricChange }) => {
+  return (
+    <Box>
+      <Paper>
+        <IconButton onClick={onMetricChange}>
+          {tempScale === "metric" ? "\u2103" : "\u2109"}
         </IconButton>
       </Paper>
     </Box>

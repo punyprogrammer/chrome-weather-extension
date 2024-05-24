@@ -3,12 +3,21 @@ import ReactDOM from "react-dom";
 import "./popup.css";
 import WeatherCard from "./WeatherCard";
 import { Box } from "@mui/material";
-import { CityInput } from "../common/Utils";
-import { getStoredCities, setStoredCities } from "../utils/storage";
+import { CityInput, TempScale } from "../common/Utils";
+import {
+  LocalStorageOptions,
+  getStoredCities,
+  getStoredOptions,
+  setStoredCities,
+  setStoredOptions,
+} from "../utils/storage";
 
 const App: React.FC<{}> = () => {
   const [cities, setCities] = useState<string[]>([]);
   const [cityQuery, setCityQuery] = useState<string>("");
+  const [options, setOptions] = useState<LocalStorageOptions>({
+    scale: "metric",
+  });
   // This function will add new city on add
   const onAdd = (city: string) => {
     const newCities = [...cities, city];
@@ -26,24 +35,53 @@ const App: React.FC<{}> = () => {
       setCities(newCities);
     });
   };
+  // This will handle the change of scale
+  const onMetricChange = () => {
+    const newOptions: LocalStorageOptions = {
+      ...options,
+      scale: options.scale === "metric" ? "imperial" : "metric",
+    };
+    setStoredOptions(newOptions).then(() => {
+      setOptions(newOptions);
+    });
+  };
   // on initial mount get from local storage
   useEffect(() => {
+    // get cities from local storage
     getStoredCities().then((res) => {
       setCities(res);
+    });
+    // get options from local storage
+    getStoredOptions().then((res) => {
+      console.log(res);
+      setOptions(res);
     });
   }, []);
   return (
     <Box px="10px" py="20px">
-      <CityInput
-        cityQuery={cityQuery}
-        onChange={(e) => {
-          e.preventDefault();
-          setCityQuery(e.target.value);
-        }}
-        onAdd={onAdd}
-      />
+      <Box
+        display="flex"
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
+        <CityInput
+          cityQuery={cityQuery}
+          onChange={(e) => {
+            e.preventDefault();
+            setCityQuery(e.target.value);
+          }}
+          onAdd={onAdd}
+        />
+        <TempScale tempScale={options.scale} onMetricChange={onMetricChange} />
+      </Box>
       {cities.map((item, index) => (
-        <WeatherCard key={item} city={item} index={index} onDelete={onDelete} />
+        <WeatherCard
+          key={item}
+          city={item}
+          index={index}
+          onDelete={onDelete}
+          tempScale={options.scale}
+        />
       ))}
     </Box>
   );
