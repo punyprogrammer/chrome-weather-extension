@@ -15,9 +15,7 @@ import {
 const App: React.FC<{}> = () => {
   const [cities, setCities] = useState<string[]>([]);
   const [cityQuery, setCityQuery] = useState<string>("");
-  const [options, setOptions] = useState<LocalStorageOptions>({
-    scale: "metric",
-  });
+  const [options, setOptions] = useState<LocalStorageOptions>(null);
   // This function will add new city on add
   const onAdd = (city: string) => {
     const newCities = [...cities, city];
@@ -57,6 +55,7 @@ const App: React.FC<{}> = () => {
       setOptions(res);
     });
   }, []);
+  if (!options) return null;
   return (
     <Box px="10px" py="20px">
       <Box
@@ -72,8 +71,17 @@ const App: React.FC<{}> = () => {
           }}
           onAdd={onAdd}
         />
-        <TempScale tempScale={options.scale} onMetricChange={onMetricChange} />
+        <TempScale tempScale={options?.scale} onMetricChange={onMetricChange} />
       </Box>
+      {options.homeCity && (
+        <WeatherCard
+          key={options.homeCity}
+          city={options.homeCity}
+          index={-1}
+          onDelete={onDelete}
+          tempScale={options.scale}
+        />
+      )}
       {cities.map((item, index) => (
         <WeatherCard
           key={item}
