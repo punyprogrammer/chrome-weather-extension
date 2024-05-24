@@ -6,6 +6,7 @@ export interface LocalStorage {
 }
 export interface LocalStorageOptions {
   scale: OpenWeatherScale;
+  homeCity: string;
 }
 export type LocalStorageKeys = keyof LocalStorage;
 // This function will set values in lical storage
