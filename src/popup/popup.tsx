@@ -34,6 +34,16 @@ const App: React.FC<{}> = () => {
       setCities(newCities);
     });
   };
+  // This will handle the setting of default city
+  const onSetDefault = (city: string) => {
+    const newOptions: LocalStorageOptions = {
+      ...options,
+      homeCity: city,
+    };
+    setStoredOptions(newOptions).then(() => {
+      setOptions(newOptions);
+    });
+  };
   // This will handle the change of scale
   const onMetricChange = () => {
     const newOptions: LocalStorageOptions = {
@@ -64,6 +74,8 @@ const App: React.FC<{}> = () => {
       setOptions(res);
     });
   }, []);
+  // for the case no homecity is present so we set the first entry as home city
+
   if (!options) return null;
   return (
     <Box px="10px" py="20px">
@@ -81,15 +93,21 @@ const App: React.FC<{}> = () => {
           onAdd={onAdd}
         />
         <TempScale tempScale={options?.scale} onMetricChange={onMetricChange} />
-        <OverlayOption handleOverlay={handleOverlay} />
+        {options.isOverlayEnabled && (
+          <OverlayOption
+            handleOverlay={handleOverlay}
+            disabled={options.homeCity === ""}
+          />
+        )}
       </Box>
-      {options?.homeCity && (
+      {options?.homeCity && cities.indexOf(options.homeCity) === -1 && (
         <WeatherCard
           key={options.homeCity}
           city={options.homeCity}
           index={-1}
           onDelete={onDelete}
           tempScale={options.scale}
+          isHomeCity={true}
         />
       )}
       {cities.map((item, index) => (
@@ -99,6 +117,8 @@ const App: React.FC<{}> = () => {
           index={index}
           onDelete={onDelete}
           tempScale={options.scale}
+          onSetDefault={onSetDefault}
+          isHomeCity={options.homeCity === item}
         />
       ))}
     </Box>

@@ -32,9 +32,21 @@ const WeatherCard: React.FC<{
   key: string;
   index: number;
   onDelete?: (index: number) => void;
+  onSetDefault?: (city: string) => void;
   tempScale: OpenWeatherScale;
   className?: string;
-}> = ({ city, index, onDelete, tempScale, className }) => {
+  isOverlay?: boolean;
+  isHomeCity?: boolean;
+}> = ({
+  city,
+  index,
+  onDelete,
+  tempScale,
+  className,
+  isOverlay,
+  onSetDefault,
+  isHomeCity,
+}) => {
   const [weatherData, setWeatherData] = useState<OpenWeatherData | null>(null);
   const [weatherCardState, setWeatherCardState] =
     useState<WeatherCardState>("loading");
@@ -75,15 +87,31 @@ const WeatherCard: React.FC<{
         Feels Like:{Math.round(weatherData?.main?.feels_like)}
         {scaleSymbol}
       </Typography>
-      <CardActions sx={{ paddingInline: "0px" }}>
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={() => onDelete(index)}
-        >
-          Delete
-        </Button>
-      </CardActions>
+      <Box
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="space-between"
+      >
+        {onSetDefault && !isHomeCity && (
+          <CardActions
+            onClick={() => onSetDefault(city)}
+            sx={{ paddingInline: "0px" }}
+          >
+            <Button variant="contained" color="primary">
+              SET AS DEFAULT
+            </Button>
+          </CardActions>
+        )}
+        <CardActions sx={{ paddingInline: "0px" }}>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => onDelete(index)}
+          >
+            {isOverlay ? "Remove" : "Delete"}
+          </Button>
+        </CardActions>
+      </Box>
     </WeatherCardContainer>
   );
 };

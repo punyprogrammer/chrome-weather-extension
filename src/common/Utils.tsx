@@ -2,7 +2,7 @@ import React, { ChangeEvent } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
-import { IconButton, InputBase, Paper } from "@mui/material";
+import { IconButton, InputBase, Paper, Tooltip } from "@mui/material";
 import { OpenWeatherScale } from "../utils/apiCalls";
 import PictureInPicture from "@mui/icons-material/PictureInPicture";
 
@@ -47,26 +47,36 @@ export const TempScale: React.FC<{
   tempScale: OpenWeatherScale;
   onMetricChange: () => void;
 }> = ({ tempScale, onMetricChange }) => {
+  const tooltipTitle =
+    tempScale === "metric" ? "Change to Fahrenheit" : "Change to Celsius";
   return (
-    <Box>
-      <Paper>
-        <IconButton onClick={onMetricChange}>
-          {tempScale === "metric" ? "\u2103" : "\u2109"}
-        </IconButton>
-      </Paper>
-    </Box>
+    <Tooltip title={tooltipTitle}>
+      <Box>
+        <Paper>
+          <IconButton onClick={onMetricChange}>
+            {tempScale === "metric" ? "\u2103" : "\u2109"}
+          </IconButton>
+        </Paper>
+      </Box>
+    </Tooltip>
   );
 };
-export const OverlayOption: React.FC<{ handleOverlay: () => void }> = ({
-  handleOverlay,
-}) => {
+export const OverlayOption: React.FC<{
+  handleOverlay: () => void;
+  disabled: boolean;
+}> = ({ handleOverlay, disabled }) => {
+  const titleForTooltip = disabled
+    ? "Set a Default city to enable overlay"
+    : "Enable Overlay";
   return (
-    <Box onClick={handleOverlay}>
-      <Paper>
-        <IconButton>
-          <PictureInPicture />
-        </IconButton>
-      </Paper>
-    </Box>
+    <Tooltip title={titleForTooltip}>
+      <Box onClick={handleOverlay}>
+        <Paper>
+          <IconButton disabled={disabled}>
+            <PictureInPicture />
+          </IconButton>
+        </Paper>
+      </Box>
+    </Tooltip>
   );
 };
