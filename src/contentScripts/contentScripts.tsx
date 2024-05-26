@@ -19,15 +19,6 @@ const App: React.FC<{}> = () => {
   const [offsetY, setOffsetY] = useState(0);
   const [position, setPosition] = useState({ left: 100, top: 200 });
 
-  const onDelete = () => {
-    const newOptions: LocalStorageOptions = {
-      ...options,
-      isOverlayEnabled: false,
-    };
-    setStoredOptions(newOptions).then(() => {
-      setOptions(newOptions);
-    });
-  };
   // to handle mouseDown
   const handleMouseDown = (e) => {
     setIsDragging(true);
