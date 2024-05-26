@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import {
   OpenWeatherData,
   OpenWeatherScale,
+  getImageSrcForWeatherIcon,
   getWeatherDataForQuery,
 } from "../../utils/apiCalls";
 import {
+  Box,
   Box,
   Button,
   Card,
@@ -78,15 +80,42 @@ const WeatherCard: React.FC<{
   }
   return (
     <WeatherCardContainer>
-      <Typography variant="h5">{weatherData?.name}</Typography>
-      <Typography variant="body1">
-        Temp:{Math.round(weatherData?.main?.temp)}
-        {scaleSymbol}
-      </Typography>
-      <Typography variant="body1">
-        Feels Like:{Math.round(weatherData?.main?.feels_like)}
-        {scaleSymbol}
-      </Typography>
+      <Box
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
+        <Box>
+          <Typography variant="h5">{weatherData?.name}</Typography>
+          <Typography variant="body1">
+            Temp:{Math.round(weatherData?.main?.temp)}
+            {scaleSymbol}
+          </Typography>
+          <Typography variant="body1">
+            Feels Like:{Math.round(weatherData?.main?.feels_like)}
+            {scaleSymbol}
+          </Typography>
+        </Box>
+        <Box>
+          {weatherData?.weather[0]?.icon && (
+            <Box
+              sx={{ display: "flex", flexDirection: "column" }}
+              alignItems={"center"}
+            >
+              <img
+                src={getImageSrcForWeatherIcon(weatherData?.weather?.[0]?.icon)}
+                style={{ display: "inline-flex" }}
+              />
+              <Typography
+                variant="subtitle2"
+                style={{ display: "inline-flex" }}
+              >
+                {weatherData?.weather?.[0]?.description}
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      </Box>
       <Box
         display={"flex"}
         alignItems={"center"}
