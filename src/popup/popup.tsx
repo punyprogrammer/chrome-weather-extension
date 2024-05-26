@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./popup.css";
 import WeatherCard from "./WeatherCard";
-import { Box } from "@mui/material";
-import { CityInput, TempScale } from "../common/Utils";
+import { Box, Icon } from "@mui/material";
+import { CityInput, OverlayOption, TempScale } from "../common/Utils";
 import {
   LocalStorageOptions,
   getStoredCities,
@@ -11,6 +11,7 @@ import {
   setStoredCities,
   setStoredOptions,
 } from "../utils/storage";
+import { Messages } from "../utils/messages";
 
 const App: React.FC<{}> = () => {
   const [cities, setCities] = useState<string[]>([]);
@@ -43,6 +44,14 @@ const App: React.FC<{}> = () => {
       setOptions(newOptions);
     });
   };
+  // set overlay to true
+  const handleOverlay = () => {
+    chrome.tabs.query({ active: true }, (tabs) => {
+      if (tabs.length > 0) {
+        chrome.tabs.sendMessage(tabs[0].id, Messages.TOGGLE_OVERLAY);
+      }
+    });
+  };
   // on initial mount get from local storage
   useEffect(() => {
     // get cities from local storage
@@ -72,6 +81,7 @@ const App: React.FC<{}> = () => {
           onAdd={onAdd}
         />
         <TempScale tempScale={options?.scale} onMetricChange={onMetricChange} />
+        <OverlayOption handleOverlay={handleOverlay} />
       </Box>
       {options?.homeCity && (
         <WeatherCard
