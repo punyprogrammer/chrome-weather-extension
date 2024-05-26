@@ -1,0 +1,9 @@
+.overlayCard{
+    width: 240px  !important;
+    height: 200px;
+    position: fixed;
+    font-size: 18px !important;
+    left:15%;
+    top:15%;
+    z-index: 9999;
+}
