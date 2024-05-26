@@ -8,18 +8,17 @@ import {
 } from "../utils/storage";
 import "./contentScripts.css";
 import { Card } from "@mui/material";
+import { Messages } from "../utils/messages";
 
 const App: React.FC<{}> = () => {
   const [options, setOptions] = useState<LocalStorageOptions>(null);
+  const [isActive, setIsActive] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
   const [position, setPosition] = useState({ left: 100, top: 200 });
-  useEffect(() => {
-    getStoredOptions().then((res) => {
-      setOptions(res);
-    });
-  }, []);
+
   const onDelete = () => {
     const newOptions: LocalStorageOptions = {
       ...options,
@@ -47,7 +46,21 @@ const App: React.FC<{}> = () => {
   const handleMouseUp = () => {
     setIsDragging(false);
   };
-  if (options?.homeCity && options?.isOverlayEnabled) {
+  useEffect(() => {
+    getStoredOptions().then((res) => {
+      setOptions(res);
+      setIsActive(res.isOverlayEnabled);
+    });
+  }, []);
+  // Listen for messages from the popup
+  useEffect(() => {
+    chrome.runtime.onMessage.addListener((msg) => {
+      if (msg === Messages.TOGGLE_OVERLAY) {
+        setIsActive(!isActive);
+      }
+    });
+  }, []);
+  if (isActive && options.homeCity) {
     return (
       <div
         className="overlayCard"
@@ -60,7 +73,7 @@ const App: React.FC<{}> = () => {
           city={options.homeCity}
           tempScale={options.scale}
           index={1}
-          onDelete={onDelete}
+          onDelete={() => setIsActive(false)}
           key="1"
         />
       </div>
