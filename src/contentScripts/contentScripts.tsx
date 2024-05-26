@@ -40,7 +40,6 @@ const App: React.FC<{}> = () => {
   useEffect(() => {
     getStoredOptions().then((res) => {
       setOptions(res);
-      setIsActive(res.isOverlayEnabled);
     });
   }, []);
   // Listen for messages from the popup
@@ -66,6 +65,7 @@ const App: React.FC<{}> = () => {
           index={1}
           onDelete={() => setIsActive(false)}
           key="1"
+          isOverlay={true}
         />
       </div>
     );

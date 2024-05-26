@@ -5,7 +5,7 @@ import {
 } from "../utils/storage";
 chrome.runtime.onInstalled.addListener(() => {
   setStoredCities([]);
-  setStoredOptions({ scale: "metric", homeCity: "", isOverlayEnabled: true });
+  setStoredOptions({ scale: "metric", homeCity: "", isOverlayEnabled: false });
   // create context menu
   chrome.contextMenus.create({
     contexts: ["selection"],
