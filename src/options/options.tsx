@@ -16,7 +16,7 @@ const App: React.FC<{}> = () => {
   useEffect(() => {
     getStoredOptions().then((res) => {
       setOptions(res);
-      setHomeCity(res.homeCity);
+      setHomeCity(res?.homeCity);
     });
   }, []);
   const onSaveHomeCity = () => {

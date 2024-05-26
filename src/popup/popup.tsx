@@ -73,7 +73,7 @@ const App: React.FC<{}> = () => {
         />
         <TempScale tempScale={options?.scale} onMetricChange={onMetricChange} />
       </Box>
-      {options.homeCity && (
+      {options?.homeCity && (
         <WeatherCard
           key={options.homeCity}
           city={options.homeCity}

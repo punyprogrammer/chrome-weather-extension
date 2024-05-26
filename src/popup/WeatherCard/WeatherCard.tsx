@@ -14,9 +14,12 @@ import {
 } from "@mui/material";
 import { getSymbolForScale } from "../../utils/utilFunctions";
 
-const WeatherCardContainer: React.FC<{ children }> = ({ children }) => {
+const WeatherCardContainer: React.FC<{ children; className?: string }> = ({
+  children,
+  className,
+}) => {
   return (
-    <Box mx="4px" my="16px">
+    <Box className={className} mx="4px" my="16px">
       <Card>
         <CardContent>{children}</CardContent>
       </Card>
@@ -30,7 +33,8 @@ const WeatherCard: React.FC<{
   index: number;
   onDelete?: (index: number) => void;
   tempScale: OpenWeatherScale;
-}> = ({ city, index, onDelete, tempScale }) => {
+  className?: string;
+}> = ({ city, index, onDelete, tempScale, className }) => {
   const [weatherData, setWeatherData] = useState<OpenWeatherData | null>(null);
   const [weatherCardState, setWeatherCardState] =
     useState<WeatherCardState>("loading");
