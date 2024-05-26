@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./options.css";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import {
   LocalStorageOptions,
   getStoredOptions,
@@ -11,6 +18,7 @@ type FormState = "loading" | "error" | "ready";
 const App: React.FC<{}> = () => {
   const [homecity, setHomeCity] = useState<string>("");
   const [options, setOptions] = useState<LocalStorageOptions>(null);
+  const [overlay, setOverlay] = useState<boolean>(false);
   const [formState, setFormState] = useState<FormState>("ready");
 
   useEffect(() => {
@@ -19,9 +27,13 @@ const App: React.FC<{}> = () => {
       setHomeCity(res?.homeCity);
     });
   }, []);
-  const onSaveHomeCity = () => {
+  const onSave = () => {
     setFormState("loading");
-    const newOptions = { ...options, homeCity: homecity };
+    const newOptions = {
+      ...options,
+      homeCity: homecity,
+      isOverlayEnabled: overlay,
+    };
     setStoredOptions(newOptions).then(() => {
       setOptions(newOptions);
       setFormState("ready");
@@ -54,9 +66,19 @@ const App: React.FC<{}> = () => {
         />
       </Grid>
       <Grid item xs={12}>
+        <Typography variant="h2" sx={{ fontSize: "24px", display: "flex" }}>
+          Allow Overlay on all websites
+        </Typography>
+        <Switch
+          checked={overlay}
+          onChange={() => setOverlay(!overlay)}
+          inputProps={{ "aria-label": "controlled" }}
+        />
+      </Grid>
+      <Grid item xs={12}>
         <Button
           disabled={formState === "loading"}
-          onClick={onSaveHomeCity}
+          onClick={onSave}
           variant="contained"
         >
           Save
