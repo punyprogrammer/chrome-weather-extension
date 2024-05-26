@@ -6,4 +6,11 @@
     left:15%;
     top:15%;
     z-index: 9999;
+
+}
+.overlayCard:hover{
+    cursor:grab;
+}
+.overlayCard:active{
+    cursor:grab;
 }
