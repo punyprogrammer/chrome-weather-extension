@@ -36,3 +36,6 @@ export async function getWeatherDataForQuery(
 
   return data;
 }
+export function getImageSrcForWeatherIcon(icon: string): string {
+  return `http://openweathermap.org/img/wn/${icon}@2x.png`;
+}
