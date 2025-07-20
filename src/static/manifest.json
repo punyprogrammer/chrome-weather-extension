@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "React extension",
+  "description": "A chrome extension build with React",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "A chrome extension build with React"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "contextMenus", "alarms"],
+  "content_scripts": [
+    { "matches": ["<all_urls>"], "js": ["contentScripts.js"] }
+  ]
+}
